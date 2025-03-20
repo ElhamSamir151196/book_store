@@ -1,0 +1,6 @@
+RewriteEngine On
+# change the next to your path
+RewriteBase /EraaSoft%20PHP/Projects/Book-Store/New%20folder/book%20-2/public
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
