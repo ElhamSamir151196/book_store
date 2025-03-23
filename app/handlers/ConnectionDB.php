@@ -63,6 +63,7 @@ class ConnectionDB{
     public function delete_item($table_name,$where){
         
         $query="DELETE FROM `$table_name` WHERE $where";
+        //echo "<br><br><br><br><br>$query";
         $result=mysqli_query($this->con, $query);
         if(mysqli_affected_rows($this->con)==1){
            // echo "data deleted successfully"."<br>";
@@ -134,6 +135,7 @@ class ConnectionDB{
             $query.="join $table_name_3 on $table_name_1.$table_1_key =$table_name_3.$table_3_key";
         }
 
+        //echo "<br><br><br><br><br><br><br><br><br>$query";
         $result=mysqli_query($this->con, $query);
         if($result){
             if(mysqli_num_rows($result)>0){// if select many rows

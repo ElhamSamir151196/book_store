@@ -46,7 +46,41 @@ function get_book_catergories($book_id)
     /*SELECT *
 FROM books_categories
  join catergories on books_categories.catergory_id=catergories.id and book_id = 15*/
- $data=$database->join_tables("catergories" ,"id ","books_categories","catergory_id and book_id =$book_id ");
+ $data=$database->join_tables("books_categories","catergory_id ","catergories" ,"id and book_id =$book_id ");
+    if (!empty($data)) {
+        return $data;
+    }
+
+    return false;
+}
+
+/** select catergories using id */
+function get_categories_by_book_id($book_id)
+{
+    $table_name='books_categories';
+    $database=new ConnectionDB();
+    $columns_name="catergory_id";
+    $where="book_id=$book_id ";
+    $data = $database->select($table_name, $columns_name,$where);
+    if (!empty($data)) {
+        return $data;
+    }
+
+    return false;
+}
+
+/** select catergories using id */
+function get_catergory_books($category_id)
+{
+    //$table_name='books_categories';
+    $database=new ConnectionDB();
+    //$columns_name="*";
+    //$where="catergory_id=$category_id ";
+    //$data = $database->select($table_name, $columns_name,$where);
+    /*SELECT *
+FROM books
+ join books_categories on books_categories.book_id=books.id and catergory_id = 15*/
+ $data=$database->join_tables("books" ,"id ","books_categories","book_id and catergory_id =$category_id ");
     if (!empty($data)) {
         return $data;
     }

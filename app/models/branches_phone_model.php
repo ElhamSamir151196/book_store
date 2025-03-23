@@ -21,7 +21,7 @@ function list_order_products()
 
 
 /** select branches_phone using id */
-function get_branches_phone($id)
+function get_branch_phone($id)
 {
     $table_name='branches_phone';
     $database=new ConnectionDB();
@@ -42,9 +42,9 @@ function get_branches_phone_by_branches_id($branch_id)
     $database=new ConnectionDB();
     $columns_name="*";
     $where="branch_id=$branch_id ";
-    $Review = $database->select($table_name, $columns_name,$where);
-    if (!empty($Review)) {
-        return $Review;
+    $data = $database->select($table_name, $columns_name,$where);
+    if (!empty($data)) {
+        return $data;
     }
 
     return false;

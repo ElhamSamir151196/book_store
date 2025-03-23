@@ -2,15 +2,40 @@
 require_once "../app/handlers/validations.php";
 require_once "../app/models/category_model.php";
 require_once "../app/models/user_model.php";
+require_once '../app/models/book_category_model.php';
 
 $errors=[];
 
 
 function category_index(){
     
-    $_SESSION['categories'] =  list_catergory();
+     //*********  pagination part ***************
+        // Define how many results per page
+        $limit = 5;
+
+        // Get the current page number
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $page = max($page, 1); // Ensure page is at least 1
+
+        // Calculate offset
+        $offset = ($page - 1) * $limit;
+
+        // Get total number of books
+        $total_result =get_categories_pagination("COUNT(*) AS total");//"SELECT COUNT(*) AS total FROM categories"
+        $total_categories = $total_result[0]['total'];
+        $total_pages = ceil($total_categories / $limit);
+
+        // Fetch books for the current page
+        $_SESSION['categories']= get_categories_pagination("*",null,"LIMIT $limit OFFSET $offset");//"SELECT * FROM categories LIMIT $limit OFFSET $offset";
+        $_SESSION['total_categories']=$total_categories;
+        $_SESSION['offset']=$offset;
+        $_SESSION['total_pages']=$total_pages;
+        
+
+        require '../app/pages/Dashboard/Category/category_index.php';
+    /*$_SESSION['categories'] =  list_catergory();
     redirect("index-category");
-    die;
+    die;*/
         
 }
 
@@ -85,10 +110,11 @@ function category_show(){
 
         $id=$_GET['id'];
         $category=get_catergory($id);
-
+        $catergory_books=get_catergory_books($id);
         if(isset($category)){
             $_SESSION['Category_user']= get_User( $category['user_id'] );
             $_SESSION['Category']=$category;
+            $_SESSION['catergory_books']=$catergory_books;
             redirect("category_show");
             die;
         }else{

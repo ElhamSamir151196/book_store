@@ -36,6 +36,7 @@
                 <div class="card-title col-auto flex-shrink-1 flex-grow-1"><h5>categories List</h5></div>
                 <div class="col-atuo">
                     <a class="btn btn-primary btn-sm btn-flat" href="create-category"><i class="fa fa-plus-square"></i> Add Category</a>
+                    <p class="m-0">عرض <?php echo $_SESSION['offset']+1?> - <?php echo count($_SESSION['categories'])+$_SESSION['offset']?> من أصل <?php echo $_SESSION['total_categories']?> نتيجة</p>
                 </div>
             </div>
         </div>
@@ -76,6 +77,31 @@
            
           </tbody>
         </table>
+        <div class="products__pagination mb-5 d-flex justify-content-center gap-2">
+            <?php  // Display page numbers within range
+              $link = "?page=";
+              $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+              $range=3;
+              
+              $start = max(1, $page - $range);
+              $end = min($_SESSION['total_pages'], $page + $range);
+
+            ?>
+            <?php if($page > 1): ?>
+              <a href="<?=$link?><?=($page - 1)?>" ><span class="pagination__btn rounded-1 pagination__btn--next"><i class="fa-solid fa-arrow-right-long"></i></span></a>
+            <?php endif?>
+            
+            <?php for ($i = $start; $i <= $end; $i++) : ?>
+              <?php if ($i == $page) : ?>
+                <span class="pagination__btn rounded-1 active"><?php echo $i?></span></a>
+              <?php else : ?>
+                <a href='<?=$link?><?=$i?>' style="text-decoration: none;"> <span class="pagination__btn rounded-1"><?php echo $i?></span></a>
+              <?php endif?>
+            <?php endfor?>
+            <?php if($page < $_SESSION['total_pages']): ?>
+              <a href='<?=$link?><?=($page + 1)?>'><span class="pagination__btn rounded-1 pagination__btn--prev" ><i class="fa-solid fa-arrow-left-long"></i></span></a>
+            <?php endif?>
+        </div>
       </div>
     </div>
 

@@ -82,7 +82,7 @@
             </div>            
            
             <div class="form-check">
-                <?php if(isset($_SESSION['Book']['sale_price'])):?>
+                <?php if($_SESSION['Book']['sale_price']!=0):?>
                 <input class="form-check-input" type="checkbox" value="sale" name="sale" id="sale" checked>
                 <?php else:?>
                     <input class="form-check-input" type="checkbox" value="" name="sale" id="sale" >
@@ -102,13 +102,19 @@
                 <input class="form-control" type="file" id="image" name="image" accept="image/*" >
             </div>
 
+            
+            <?php if($_SESSION['categories']):?>
             <div class="mb-3">
-                <label for="image" class="form-label">select book category</label><br>
-                <?php foreach($_SESSION['Book_categories'] as $category): ?>
-                    <input type="checkbox" name="categories[]" value="<?= $category['id'] ?>" checked>  <?= $category['catergory_id'] ?> -<?= $category['name'] ?> <br>
+                <label for="categories" class="form-label">select book category</label><br>
+                <?php foreach($_SESSION['categories'] as $category): ?>
+                    <?php if (in_array($category['id'], $_SESSION['Book_categories_id'])):?>
+                        <input type="checkbox" name="categories[]" value="<?= $category['id'] ?>" checked>  <?= $category['id'] ?> -<?= $category['name'] ?> <br>
+                    <?php else:?>
+                        <input type="checkbox" name="categories[]" value="<?= $category['id'] ?>" >  <?= $category['id'] ?> -<?= $category['name'] ?> <br>
+                    <?php endif;?>
                 <?php endforeach; ?>
             </div>
-
+            <?php endif;?>
             <button type="submit" class="btn btn-primary ">Save</button>
         </form>
     </div>

@@ -32,7 +32,7 @@
         <?php endif;?>
         <!-- error handling end-->
 
-        <h2 class="border p-2 my-2 text-center">Create Branch phone</h2>
+        <h2 class="border p-2 my-2 text-center">Add phone to branch ( <?php echo $_SESSION['branch']['city']?>)</h2>
         <form method="post" action="branch-insert-phone" class="border p-3">
             <input type="hidden" name="branch_id" id="branch_id" value="<?= isset($_GET['id']) ? (int)$_GET['id'] : null?>">
             <div class="mb-3">

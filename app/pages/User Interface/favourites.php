@@ -28,32 +28,49 @@
               <th class="d-table-cell d-md-none">product</th>
             </thead>
             <tbody class="text-center">
-              <tr>
-                <td class="d-block d-md-table-cell">
-                  <span class="favourites__remove m-auto">
-                    <i class="fa-solid fa-xmark"></i>
-                  </span>
-                </td>
-                <td class="d-block d-md-table-cell favourites__img">
-                  <img src="../app/assets/images/product-1.webp" alt="" />
-                </td>
-                <td class="d-block d-md-table-cell">
-                  <a href=""> Flutter Apprentice </a>
-                </td>
-                <td class="d-block d-md-table-cell">
-                  <span class="product__price product__price--old"
-                    >550 جنية</span
-                  >
-                  <span class="product__price">350 جنية</span>
-                </td>
-                <td class="d-block d-md-table-cell">يوليو 24, 2023</td>
-                <td class="d-block d-md-table-cell">
-                  <span class="me-2"><i class="fa-solid fa-check"></i></span>
-                  <span class="d-inline-block d-md-none d-lg-inline-block"
-                    >متوفر بالمخزون</span
-                  >
-                </td>
-              </tr>
+              
+              <?php  if($_SESSION['fav_books']):?>
+                <?php foreach($_SESSION['fav_books'] as $fav_book): ?>
+                  <tr>
+                    <td class="d-block d-md-table-cell">
+                      <a href="remove-fav-product?id=<?= $fav_book['id']?>"><span class="favourites__remove m-auto">
+                        <i class="fa-solid fa-xmark"></i>
+                      </span>
+                      </a>
+                    </td>
+                    <td class="d-block d-md-table-cell favourites__img">
+                      <img src="../app/storage/<?= $fav_book['image'] ?>" alt="" />
+                    </td>
+                    <td class="d-block d-md-table-cell">
+                      <a href="single-product?id=<?= $fav_book['book_id']?>"> <?php echo $fav_book['name']?> </a>
+                    </td>
+                    <td class="d-block d-md-table-cell">
+                      <span class="product__price product__price--old"
+                        ><?php if($fav_book['sale_price']>0):?><?php echo $fav_book['sale_price']?> جنية<?php endif?></span
+                      >
+                      <span class="product__price"><?php echo $fav_book['price']?> جنية</span>
+                    </td>
+                    <td class="d-block d-md-table-cell"><?php echo $fav_book['created_at']?></td>
+                    <td class="d-block d-md-table-cell">
+                      
+                      <span class="d-inline-block d-md-none d-lg-inline-block">
+                        <?php if($fav_book['qty']>0):?>
+                          <span class="me-2"><i class="fa-solid fa-check"></i></span>
+                        متوفر بالمخزون
+                        <?php else:?>
+                          غير متوفر حاليا 
+                        <?php endif?>
+                      </span>
+                    </td>
+                  </tr>
+                <?php endforeach ?>
+              <?php else:?>
+                <tr>
+                  <td>
+                  <?php  echo "لا يوجد حاليا";?>
+                  </td>
+                </tr>
+              <?php endif;?>
             </tbody>
           </table>
         </section>

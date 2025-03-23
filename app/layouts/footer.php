@@ -1,5 +1,5 @@
   <!-- Footer Section Start -->
-  <footer class="footer text-white">
+  <footer class="footer text-white ">
     <div class="footer__upper">
       <div class="section-container row">
         <div class="col-md-6 col-lg-3 mb-5 mb-lg-0">

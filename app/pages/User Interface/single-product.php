@@ -3,7 +3,7 @@
       <!-- Product details Start -->
       <section class="section-container my-5 pt-5 d-md-flex gap-5">
         <div class="single-product__img w-100" id="main-img">
-          <img src="../app/assets/images/product-2.webp" alt="">
+          <img src="../app/storage/<?= $_SESSION['book']['image']?>" alt="">
         </div>
         <div class="single-product__details w-100 d-flex flex-column justify-content-between">
           <div>
@@ -30,7 +30,11 @@
             </div>
             <a href="add-to-favorite?id=<?=$_SESSION['book']['id']?>" style="text-decoration: none;">
               <div class="single-product__favourite d-flex align-items-center gap-2 mb-4">
-                <i class="fa-regular fa-heart"></i>
+                <?php if( $_SESSION["is_favorite"]=="true"):?>
+                  <i class="fa-solid fa-heart"></i>
+                <?php else:?>
+                  <i class="fa-regular fa-heart"></i>
+                  <?php endif ?>
                 اضافة للمفضلة
               </div>
             </a>

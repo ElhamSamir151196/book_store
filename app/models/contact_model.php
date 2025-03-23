@@ -19,17 +19,31 @@ function list_contacts()
     return $Users;
 }
 
+/** select contacts using pagination */
+function get_contacts_pagination($columns_name,$where=null,$limit=null)
+{
+    $table_name='contacts';
+    $database=new ConnectionDB();
+    //$columns_name="*";
+    //$where="catergory_id=$catergory_id ";
+    $data = $database->select($table_name, $columns_name,$where,$limit);
+    if (!empty($data)) {
+        return $data;
+    }
+
+    return false;
+}
 
 /** select contacts using id */
-function get_contacts($id)
+function get_contact($id)
 {
     $table_name='contacts';
     $database=new ConnectionDB();
     $columns_name="*";
     $where="id=$id ";
-    $Review = $database->select($table_name, $columns_name,$where);
-    if (!empty($Review)) {
-        return $Review;
+    $data = $database->select($table_name, $columns_name,$where);
+    if (!empty($data)) {
+        return $data[0];
     }
 
     return false;

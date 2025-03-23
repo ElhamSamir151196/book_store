@@ -50,6 +50,34 @@ function get_favorite_products_by_user_id($user_id)
     return false;
 }
 
+
+/** select favorite_books using user id */
+function get_user_favorite_books($user_id)
+{
+    $database=new ConnectionDB();
+    $data=$database->join_tables("books" ,"id","favorite_products","book_id and favorite_products.user_id =$user_id ");
+    if (!empty($data)) {
+        return $data;
+    }
+
+    return false;
+}
+
+
+function is_favorite($book_id,$user_id){
+    $table_name='favorite_products';
+    $database=new ConnectionDB();
+    $columns_name="*";
+    $where="user_id=$user_id and book_id= $book_id ";
+    $data = $database->select($table_name, $columns_name,$where);
+    if (!empty($data)) {
+        return true;
+    }
+
+    return false;
+
+}
+
 //delete favorite product
 function delete_favorite_product($id)
 {

@@ -54,7 +54,7 @@
             <?php  foreach( $_SESSION['books'] as $book): ?>
             <div class="products__item col-6 col-md-4 col-lg-3 mb-5">
               <div class="product__header mb-3">
-                <a href="single-product?book_id=<?= $book['id']?>">
+                <a href="single-product?id=<?= $book['id']?>">
                   <div class="product__img-cont">
                     <img
                       class="product__img w-100 h-100 object-fit-cover"
@@ -73,7 +73,7 @@
               <div class="product__title text-center">
                 <a
                   class="text-black text-decoration-none"
-                  href="single-product?book_id=<?= $book['id']?>"
+                  href="single-product?id=<?= $book['id']?>"
                 >
                 <?php echo $book['name'] ?>
                 </a>

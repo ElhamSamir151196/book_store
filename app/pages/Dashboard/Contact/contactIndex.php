@@ -29,12 +29,12 @@
     <!--END of Handling Messages Form Session -->
                     
     <!-- Table -->
-    <h2 class="text-center">Users</h2>
+    <h2 class="text-center">Contacts</h2>
     <div class="card mt-4">
         <div class="card-header">
             <div class="d-flex justify-content-between">
-                <div class="card-title col-auto flex-shrink-1 flex-grow-1"><h5>Users List</h5></div>
-            <p class="m-0">عرض <?php echo $_SESSION['offset']+1?> - <?php echo count($_SESSION['Users'])+$_SESSION['offset']?> من أصل <?php echo $_SESSION['total_Users']?> نتيجة</p>
+                <div class="card-title col-auto flex-shrink-1 flex-grow-1"><h5>Contacts List</h5></div>
+            <p class="m-0">عرض <?php echo $_SESSION['offset']+1?> - <?php echo count($_SESSION['contacts'])+$_SESSION['offset']?> من أصل <?php echo $_SESSION['total_contacts']?> نتيجة</p>
                 
             </div>
         </div>
@@ -45,7 +45,7 @@
                 <th class="text-center">ID</th>
                 <th class="text-center">Name</th>
                 <th class="text-center">E-mail</th>
-                <th class="text-center">Type</th>
+                <th class="text-center">Reason</th>
                 <th class="text-center">Action</th>
 
             </tr>
@@ -53,21 +53,15 @@
           <tbody>
             
             
-                <?php foreach($_SESSION['Users'] as $user): ?>
+                <?php foreach($_SESSION['contacts'] as $contact): ?>
                     <tr>
-                        <td class="text-center"><?= $user['id'] ?></td>
-                        <td class="text-center"><?= $user['name'] ?></td>
-                        <td class="text-center"><?= $user['email'] ?></td>
-                        <td class="text-center"><?= $user['type'] ?></td>
+                        <td class="text-center"><?= $contact['id'] ?></td>
+                        <td class="text-center"><?= $contact['name'] ?></td>
+                        <td class="text-center"><?= $contact['email'] ?></td>
+                        <td class="text-center"><?= $contact['reason'] ?></td>
                         <td class="text-center">
-                            <a href="user_show?id=<?= $user['id'] ?>" class="btn btn-sm btn-outline-info rounded-0">
+                            <a href="contact_show?id=<?= $contact['id'] ?>" class="btn btn-sm btn-outline-info rounded-0">
                                 <i class="fa fa-eye" aria-hidden="true"></i>
-                            </a>
-                            <a href="user_edit?id=<?= $user['id'] ?>" class="btn btn-sm btn-outline-info rounded-0">
-                                <i class="fa-solid fa-edit"></i>
-                            </a>
-                            <a href="user_delete?id=<?= $user['id'] ?>" class="btn btn-sm btn-outline-danger rounded-0" onclick="if(confirm(`Are you sure to delete <?= $user['name'] ?> details?`) === false) event.preventDefault();">
-                                <i class="fa-solid fa-trash"></i>
                             </a>
                         </td>
                     </tr>
@@ -99,7 +93,7 @@
             <?php if($page < $_SESSION['total_pages']): ?>
               <a href='<?=$link?><?=($page + 1)?>'><span class="pagination__btn rounded-1 pagination__btn--prev" ><i class="fa-solid fa-arrow-left-long"></i></span></a>
             <?php endif?>
-          </div>
+        </div>
       </div>
     </div>
 

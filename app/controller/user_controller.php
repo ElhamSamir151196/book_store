@@ -78,15 +78,164 @@ function update_user_data(){
 }
 
 /** ** Dashboard */
+
+function user_index()
+{
+    //unset($_SESSION["Users"]);
+    //var_dump($_SESSION["Users"]);
+    //die;
+        //*********  pagination part ***************
+        // Define how many results per page
+        $limit = 5;
+
+        // Get the current page number
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $page = max($page, 1); // Ensure page is at least 1
+
+        // Calculate offset
+        $offset = ($page - 1) * $limit;
+
+        // Get total number of books
+        $total_result =get_users_pagination("COUNT(*) AS total");//"SELECT COUNT(*) AS total FROM users"
+        $total_Users = $total_result[0]['total'];
+        $total_pages = ceil($total_Users / $limit);
+
+        // Fetch books for the current page
+        $_SESSION['Users']= get_users_pagination("*",null,"LIMIT $limit OFFSET $offset");//"SELECT * FROM Users LIMIT $limit OFFSET $offset";
+        $_SESSION['total_Users']=$total_Users;
+        $_SESSION['offset']=$offset;
+        $_SESSION['total_pages']=$total_pages;
+        
+
+        require '../app/pages/Dashboard/User/userIndex.php';
+        //redirect("index-users");
+        //die;
+}
+/*
 function user_index(){
     
     $_SESSION['Users'] =  list_users();
     redirect("index-users");
     die;
         
+}*/
+
+function show(){
+    if (checkRequestMethod("GET"))
+    { 
+        if(!isset($_GET['id'])){
+            $_SESSION['error'] =  "id required";
+            user_index();
+        }
+
+        $id=$_GET['id'];
+        
+        $User=get_User($id);
+        if(isset($User)){
+            $_SESSION['User']=(object)$User;
+            require("../app/pages/Dashboard/User/userShow.php");//redirect user
+           
+        }else{
+            $_SESSION['error']="can't get user data";
+            user_index();
+        }
+        
+    }else{
+        $_SESSION["error"]= "not supported method";
+        user_index();
+    }
+   
 }
 
+function edit(){
+    if (checkRequestMethod("GET"))
+    { 
+        if(!isset($_GET['id'])){
+            $_SESSION['error'] =  "id required";
+            user_index();
+        }
 
+        $id=$_GET['id'];
+        
+        $User=get_User($id);
+        if(isset($User)){
+            $_SESSION['User']=(object)$User;
+            require("../app/pages/Dashboard/User/userEdit.php");//redirect user
+           
+        }else{
+            $_SESSION['error']="can't get user data";
+            user_index();
+        }
+        
+    }else{
+        $_SESSION["error"]= "not supported method";
+        user_index();
+    }
+}
+
+function update(){
+    if (checkRequestMethod("POST"))
+    { 
+        
+        foreach($_POST as $key => $value){
+            $$key=sanitizeInput($value);
+        }
+    
+        
+        if($type =="admin"){
+
+                $data['type'] = "admin";
+                $User=update_User($id,$data);
+               
+                if(isset($User)){
+                    $_SESSION['Success']= "User $id become admin now";
+                    redirect("user_show?id=$id");
+                    die;
+                }else{
+                    $_SESSION["error"]= "user not updated";
+                    redirect("user_edit?id=$id");
+                    die;
+                }
+                
+        }else{
+           
+            $_SESSION["error"]= "no change happended";
+            redirect("user_edit?id=$id");
+            die;
+        }
+    }else{
+        $_SESSION["error"]= "not supported method";
+        user_index();
+    }
+}
+
+function delete(){
+    
+    if($_SERVER['REQUEST_METHOD']=="GET"){
+    
+        if(!isset($_GET['id'])){
+            $_SESSION['error'] =  "id required";
+            user_index();
+        }
+
+        $id=$_GET['id'];
+
+        $delete_statues=delete_User($id);
+        if($delete_statues){
+            $_SESSION['Success']= "data deleted successfully";
+            
+        }else{
+            $_SESSION['error'] =  "can't delete data";
+            
+        }
+        user_index();
+    
+        
+    }else{
+        $_SESSION['error'] =  "not supported Method";
+        user_index();
+    }
+}
 
 
 ?>

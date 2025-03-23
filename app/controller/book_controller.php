@@ -4,6 +4,8 @@ require_once "../app/models/book_model.php";
 require_once "../app/models/user_model.php";
 require_once "../app/models/category_model.php";
 require_once "../app/models/book_category_model.php";
+require_once '../app/models/favorite_model.php';
+
 
 $errors=[];
 
@@ -44,16 +46,28 @@ function book_show_user(){
     
     if($_SERVER['REQUEST_METHOD']=="GET"){
     
-        if(!isset($_GET['book_id'])){
+        
+        if(!isset($_GET['id'])){
             $_SESSION['error'] =  "id required";
             redirect("home");
             die;
         }
 
-        $id=$_GET['book_id'];
+        $id=$_GET['id'];
         $book=get_book($id);
         
         if(isset($book)){
+           // echo("<br><br><br><br><br><br><br>");
+            //var_dump(is_favorite($id,$_SESSION['auth']['id']));
+            
+            if(is_favorite($id,$_SESSION['auth']['id'])){
+                $_SESSION["is_favorite"]= "true";
+            }else{
+               $_SESSION["is_favorite"]="false";
+               
+            }
+            //echo(isset($_SESSION["is_favorite"]));
+           // die;
             $_SESSION['book']=$book;
             $_SESSION['Book_categories'] = get_book_catergories($id);
             require '../app/pages/User Interface/single-product.php';
@@ -72,13 +86,46 @@ function book_show_user(){
 
 }
 
+
+/** dashboard*/
+function book_index()
+{
+    
+        //*********  pagination part ***************
+        // Define how many results per page
+        $limit = 5;
+
+        // Get the current page number
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $page = max($page, 1); // Ensure page is at least 1
+
+        // Calculate offset
+        $offset = ($page - 1) * $limit;
+
+        // Get total number of books
+        $total_result =get_books_pagination("COUNT(*) AS total");//"SELECT COUNT(*) AS total FROM books"
+        $total_books = $total_result[0]['total'];
+        $total_pages = ceil($total_books / $limit);
+
+        // Fetch books for the current page
+        $_SESSION['books']= get_books_pagination("*",null,"LIMIT $limit OFFSET $offset");//"SELECT * FROM books LIMIT $limit OFFSET $offset";
+        $_SESSION['total_books']=$total_books;
+        $_SESSION['offset']=$offset;
+        $_SESSION['total_pages']=$total_pages;
+        
+
+        require '../app/pages/Dashboard/Book/book_index.php';
+        //redirect("index-users");
+        //die;
+}
+/*
 function book_index()
 {
     $_SESSION['books'] =  list_books();
     redirect("index-book");
     die;
 }
-
+*/
 function book_create(){
     $_SESSION['categories'] =  list_catergory();
     redirect("create_book");
@@ -238,8 +285,9 @@ function book_insert(){
                 }
             $_SESSION['Success']="Added new book Successfully";
             $_SESSION['books'] =  list_books();
-            redirect("index-book");
-            die;
+            book_index();
+            //redirect("index-book");
+            //die;
             
         }else{
             $_SESSION['errors']=$errors;
@@ -283,7 +331,7 @@ function book_delete(){
     }
 }
 
-function book_edit(){
+function book_show(){
     if($_SERVER['REQUEST_METHOD']=="GET"){
     
         if(!isset($_GET['id'])){
@@ -297,10 +345,38 @@ function book_edit(){
         if(isset($book)){
             $_SESSION['Book_user']= get_User( $book['user_id'] );
             $_SESSION['Book_categories'] = get_book_catergories($id);
-            
             $_SESSION['Book']=$book;
-            redirect("book_edit");
-            die;
+            require '../app/pages/Dashboard/Book/book_show.php';
+        }else{
+            $_SESSION['error'] =  "can't get Book data $id";
+            book_index();
+        }
+    
+        
+    }else{
+        $_SESSION['error'] =  "not supported Method";
+        book_index();
+    }
+}
+
+function book_edit(){
+    if($_SERVER['REQUEST_METHOD']=="GET"){
+    
+        if(!isset($_GET['id'])){
+            $_SESSION['error'] =  "id required";
+            book_index();
+        }
+
+        $id=$_GET['id'];
+        $book=get_book($id);
+
+        if(isset($book)){
+            $_SESSION['Book_user']= get_User( $book['user_id'] );
+            $categories_id= (get_categories_by_book_id($id) == false) ? [] : array_column(get_categories_by_book_id($id), "catergory_id");
+            $_SESSION['Book_categories_id'] = $categories_id;//array_column($categories_id, "id");
+            $_SESSION['categories'] =  list_catergory();
+            $_SESSION['Book']=$book;
+            require '../app/pages/Dashboard/Book/book_edit.php';
         }else{
             $_SESSION['error'] =  "can't get Book data $id";
             book_index();
@@ -324,7 +400,7 @@ function book_update(){
 
         foreach($_POST as $key => $value){
             if($key=="categories"){
-                $$key=$value; // array value from check inputs
+                $$key=$value;//$categories[]=$value; // array value from check inputs
             }else{
                 $$key=sanitizeInput($value);        
             }
@@ -398,6 +474,8 @@ function book_update(){
             }elseif($sale_price<=$price){
                 $errors[]= "sale Price must be number greater than price";
             }
+        }else{
+            $sale_price=null;
         }
 
 
@@ -426,7 +504,6 @@ function book_update(){
                     // Move the temp image file to the images directory
                     // (Temp image location , New image location
                     $result= move_uploaded_file( $image_file["tmp_name"],$path);
-
                     if (!$result) {
                         $errors[]= 'failed to upload';
                     }
@@ -453,25 +530,37 @@ function book_update(){
             "description" => $description,
             "page_number" =>$page_number,
             "language" => $language??"english",
-            "image" =>$image_name ,
+            "image" =>$image_name??$book["image"] ,
             "code" =>$book["code"],
             "created_at"=> $book["created_at"]
         ];
-        
-        if($book == $data){
-            $_SESSION['error']="no change in data";
-            redirect("book-edit?id=$id");
-            die;
-         }
-         $update_staues=update_book($id,$data);
-        if($update_staues){
-            $_SESSION['Success']="book updated successfully";
-            book_index();
-        }
 
-        $_SESSION['error']="error in update book";
-        redirect("book-edit?id=$id");
-        die;
+        
+        
+        delete_book_catergory_by_book_id($id);
+        if(isset($categories)){
+            //var_dump($categories[0]);
+            foreach($categories as $category){
+                $category_data=[
+                    "book_id"=>$id,
+                    "catergory_id"=>$category
+                ];
+                add_books_categories($category_data);
+            }
+        }
+        if($data != $book){
+            $update_staues=update_book($id,$data);
+            //echo "<br><br><br><br><br><br><br><br>".$update_staues;
+            //die;
+           if(!$update_staues){
+               $_SESSION['error']="error in update book";
+               redirect("book-edit?id=$id");
+               die;
+           }
+        }
+        $_SESSION['Success']="book updated successfully";
+        book_index();
+         
     }else{
         $_SESSION['errors']=$errors;
         redirect("book-edit?id=$id");
@@ -482,5 +571,6 @@ function book_update(){
     book_index();
 }
 }
+
 
 ?>

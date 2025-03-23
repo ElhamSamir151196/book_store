@@ -3,6 +3,7 @@ require_once "../app/handlers/validations.php";
 require_once "../app/models/contact_model.php";
 $errors=[];
 
+/******* user interface */
 function contact_insert(){
     if (checkRequestMethod("POST"))
     {
@@ -81,6 +82,66 @@ function contact_insert(){
         redirect("contact");
         die;
     }
+}
+
+/** dashboard */
+function contact_index(){
+    
+    //*********  pagination part ***************
+       // Define how many results per page
+       $limit = 5;
+
+       // Get the current page number
+       $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+       $page = max($page, 1); // Ensure page is at least 1
+
+       // Calculate offset
+       $offset = ($page - 1) * $limit;
+
+       // Get total number of contacts
+       $total_result =get_contacts_pagination("COUNT(*) AS total");//"SELECT COUNT(*) AS total FROM contacts"
+       $total_contacts = $total_result[0]['total'];
+       $total_pages = ceil($total_contacts / $limit);
+
+       // Fetch contacts for the current page
+       $_SESSION['contacts']= get_contacts_pagination("*",null,"LIMIT $limit OFFSET $offset");//"SELECT * FROM contacts LIMIT $limit OFFSET $offset";
+       $_SESSION['total_contacts']=$total_contacts;
+       $_SESSION['offset']=$offset;
+       $_SESSION['total_pages']=$total_pages;
+       
+
+       require '../app/pages/Dashboard/Contact/contactIndex.php';
+   /*$_SESSION['categories'] =  list_catergory();
+   redirect("index-category");
+   die;*/
+       
+}
+
+function contact_show(){
+   
+   if($_SERVER['REQUEST_METHOD']=="GET"){
+   
+       if(!isset($_GET['id'])){
+           $_SESSION['error'] =  "id required";
+           contact_index();
+       }
+
+       $id=$_GET['id'];
+       $contact=get_contact($id);
+       if(isset($contact)){
+           $_SESSION['contact']=$contact;
+           require '../app/pages/Dashboard/Contact/contactShow.php';
+       }else{
+           $_SESSION['error'] =  "can't get contact data";
+           contact_index();
+       }
+   
+       
+   }else{
+       $_SESSION['error'] =  "not supported Method";
+       contact_index();
+   }
+
 }
 
 

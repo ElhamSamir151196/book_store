@@ -19,6 +19,20 @@ function list_branches()
     return $Users;
 }
 
+/** select branches using pagination */
+function get_branches_pagination($columns_name,$where=null,$limit=null)
+{
+    $table_name='branches';
+    $database=new ConnectionDB();
+    //$columns_name="*";
+    //$where="catergory_id=$catergory_id ";
+    $data = $database->select($table_name, $columns_name,$where,$limit);
+    if (!empty($data)) {
+        return $data;
+    }
+
+    return false;
+}
 
 /** select branches using id */
 function get_branch($id)

@@ -51,6 +51,38 @@
 
             <button type="submit" class="btn btn-primary ">Save</button>
         </form>
+        <?php if($_SESSION['branch_phones']):?>
+            <div class="card-body">
+            <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th class="text-center">ID</th>
+                    <th class="text-center">Phone</th>
+                    <th class="text-center">Created At</th>
+                    <th class="text-center">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                
+                    <?php foreach($_SESSION['branch_phones'] as $phone): ?>
+                        <tr>
+                            <td class="text-center"><?= $phone['id'] ?></td>
+                            <td class="text-center"><?= $phone['phone_number'] ?></td>
+                            <td class="text-center"><?= $phone['created_at'] ?></td>
+                            <td class="text-center">
+                            
+                            <a href="phone_number_delete?id=<?= $phone['id'] ?>" class="btn btn-sm btn-outline-danger rounded-0" onclick="if(confirm(`Are you sure to delete <?= $phone['phone_number'] ?> details?`) === false) event.preventDefault();">
+                                <i class="fa-solid fa-trash"></i>
+                            </a>
+                        </td>
+                        </tr>
+                    <?php endforeach; ?>
+            
+            </tbody>
+            </table>
+            </div>
+        <?php endif;?>
     </div>
 
   

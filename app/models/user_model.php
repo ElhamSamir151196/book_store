@@ -18,6 +18,22 @@ function list_users()
     return $Users;
 }
 
+
+/** select users using pagination */
+function get_users_pagination($columns_name,$where=null,$limit=null)
+{
+    $table_name='users';
+    $database=new ConnectionDB();
+    //$columns_name="*";
+    //$where="catergory_id=$catergory_id ";
+    $data = $database->select($table_name, $columns_name,$where,$limit);
+    if (!empty($data)) {
+        return $data;
+    }
+
+    return false;
+}
+
 /** to check if email exist already in users before or not*/
 function notExistEmail($email)
 {

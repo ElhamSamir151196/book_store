@@ -76,6 +76,31 @@
             </table>
             
         <?php endif;?>
+        <?php if($_SESSION['branch_phones']):?>
+            <div class="card-body">
+            <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th class="text-center">ID</th>
+                    <th class="text-center">Phone</th>
+                    <th class="text-center">Created At</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                
+                    <?php foreach($_SESSION['branch_phones'] as $phone): ?>
+                        <tr>
+                            <td class="text-center"><?= $phone['id'] ?></td>
+                            <td class="text-center"><?= $phone['phone_number'] ?></td>
+                            <td class="text-center"><?= $phone['created_at'] ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+            
+            </tbody>
+            </table>
+            </div>
+        <?php endif;?>
     </div>
 
   

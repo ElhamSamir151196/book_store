@@ -81,12 +81,16 @@
             add_to_cart();
             break;
         case 'add-to-favorite':
-            require_once '../app/controller/book_controller.php';
+            require_once '../app/controller/favourites_controller.php';
             add_to_favorite();
             break;
         case 'favourites':
             require_once '../app/controller/favourites_controller.php';
             favourites_index();
+            break;
+        case 'remove-fav-product':
+            require_once '../app/controller/favourites_controller.php';
+            delete_favourit_book();
             break;
         case 'profile':
             require_once '../app/controller/user_controller.php';
@@ -155,6 +159,22 @@
         case 'index-users':
             require '../app/pages/Dashboard/User/userIndex.php';
             break;
+        case 'user_show':
+            require_once '../app/controller/user_controller.php';
+            show();
+            break;
+        case 'user_edit':
+            require_once '../app/controller/user_controller.php';
+            edit();
+            break;
+        case 'user_update':
+            require_once '../app/controller/user_controller.php';
+            update();
+            break;
+        case 'user_delete':
+            require_once '../app/controller/user_controller.php';
+            delete();
+            break;
             /**** bashboard Category */
         case 'dashboard-catergory-index':
             require_once '../app/controller/category_controller.php';
@@ -192,6 +212,17 @@
             require_once '../app/controller/category_controller.php';
             category_delete();
             break;
+        
+            /*** dashboard contact */
+        case 'dashboard-contact-index':
+            require_once '../app/controller/contact_controller.php';
+            contact_index();
+            break;
+        case 'contact_show':
+            require_once '../app/controller/contact_controller.php';
+            contact_show();
+            break;
+
             /*** dashboard  book*/
         case 'dashboard-book-index':
             require_once '../app/controller/book_controller.php';
@@ -218,6 +249,10 @@
         case 'book-edit':
             require_once '../app/controller/book_controller.php';
             book_edit();
+            break;
+        case 'book-show':
+            require_once '../app/controller/book_controller.php';
+            book_show();
             break;
         case 'book_edit':
             require '../app/pages/Dashboard/Book/book_edit.php';
@@ -266,7 +301,13 @@
             branch_add_phone();
             break;
         case 'branch-add-phone':
-            require '../app/pages/Dashboard/Branch/branch_add_phone.php';
+            //require '../app/pages/Dashboard/Branch/branch_add_phone.php';
+            require_once '../app/controller/branches_controller.php';
+            branch_create_phone();
+            break;
+        case 'phone_number_delete':
+            require_once '../app/controller/branches_controller.php';
+            branch_delete_phone();
             break;
             /** default */
         default:

@@ -72,6 +72,36 @@
             </table>
             
         <?php endif;?>
-    </div>
+        
+        <?php if($_SESSION['catergory_books']):?>
+            <div class="card-body">
+            <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th class="text-center">ID</th>
+                    <th class="text-center">Name</th>
+                    <th class="text-center">Image</th>
+                    <th class="text-center">Created At</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                
+                    <?php foreach($_SESSION['catergory_books'] as $book): ?>
+                        <tr>
+                            <td class="text-center"><?= $book['id'] ?></td>
+                            <td class="text-center"><?= $book['name'] ?></td>
+                            <td class="text-center">
+                                <img  src='../app/storage/<?= $book['image'] ?>' style="width: 150px; height: 150px;"/>
+                            </td>
+                            <td class="text-center"><?= $book['created_at'] ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+            
+            </tbody>
+            </table>
+            </div>
+        <?php endif;?>
+</div>
 
   
