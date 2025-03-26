@@ -31,6 +31,7 @@
                 <li class="nav__link nav__user-link"><a href="orders">الطلبات</a></li>
                 <li class="nav__link nav__user-link"><a href="account_details">تفاصيل الحساب</a></li>
                 <li class="nav__link nav__user-link"><a href="favourites">المفضلة</a></li>
+                <li class="nav__link nav__user-link"><a class="d-flex align-items-center" data-bs-toggle="offcanvas" data-bs-target="#nav__cart">عربة التسوق</a></li>
                 <li class="nav__link nav__user-link"><a href="logout">تسجيل الخروج</a></li>
               </ul>
             </li> 
@@ -130,31 +131,42 @@
           </button>
         </div>
         <div class="nav__categories-body offcanvas-body pt-4">
+          <?php if(!isset($_SESSION['cart'])):?>
           <p>لا توجد منتجات في سلة المشتريات.</p>
+          <?php  else: ?>
           <div class="cart-products">
             <ul class="nav__list list-unstyled">
-              <li class="cart-products__item d-flex justify-content-between gap-2">
-                <div class="d-flex gap-2">
-                  <div>
-                    <button class="cart-products__remove">x</button>
+              
+              <?php $sum=0;?>
+              <?php foreach($_SESSION['cart'] as $key => $book_cart):?>
+                <li class="cart-products__item d-flex justify-content-between gap-2">
+                  <div class="d-flex gap-2">
+                    <div>
+                      <form action="delete-product-cart" method="post">
+                        <input type="hidden" name="id" id="id" value="<?=$book_cart['id']?>">
+                        <button class="cart-products__remove" type="submit">x</button>
+                      </form>
+                    </div>
+                    <div>
+                      <p class="cart-products__name m-0 fw-bolder"><?php echo $book_cart['name']?></p>
+                      <p class="cart-products__price m-0">  <?php echo $book_cart['book_qty']?> x  جنيه <?php echo $book_cart['price']?>    </p>
+                      <?php $sum+=($book_cart['book_qty']*$book_cart['price']);?>
+                    </div>
                   </div>
-                  <div>
-                    <p class="cart-products__name m-0 fw-bolder">Flutter Apprentice</p>
-                    <p class="cart-products__price m-0">1 x 350.00 جنيه</p>
+                  <div class="cart-products__img">
+                    <img class="w-100" src="../app/storage/<?=$book_cart['image']?>" alt="">
                   </div>
-                </div>
-                <div class="cart-products__img">
-                  <img class="w-100" src="../app/assets/images/product-1.webp" alt="">
-                </div>
-              </li>
+                </li>
+              <?php endforeach?>
             </ul>
             <div class="d-flex justify-content-between">
               <p class="fw-bolder">المجموع:</p>
-              <p>350.00 جنيه</p>
+              <p><?php echo $sum;?> جنيه</p>
             </div>
           </div>
-          <button class="nav__cart-btn text-center text-white w-100 border-0 mb-3 py-2 px-3 bg-success">اتمام الطلب</button>
-          <button class="nav__cart-btn text-center w-100 py-2 px-3 bg-transparent">تابع التسوق</button>
+          <button class="nav__cart-btn text-center text-white w-100 border-0 mb-3 py-2 px-3 bg-success" onclick="window.location.href='check-out'">اتمام الطلب</button>
+          <?php endif?>
+          <button class="nav__cart-btn text-center w-100 py-2 px-3 bg-transparent" onclick="window.location.href='home'">تابع التسوق</button>
         </div>
       </div>
     </div>

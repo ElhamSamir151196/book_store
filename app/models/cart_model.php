@@ -19,6 +19,19 @@ function list_cart_products()
     return $Users;
 }
 
+function is_product_in_cart($book_id,$user_id){
+    $table_name='cart_products';
+    $database=new ConnectionDB();
+    $columns_name="*";
+    $where="user_id=$user_id and book_id= $book_id ";
+    $data = $database->select($table_name, $columns_name,$where);
+    if (!empty($data)) {
+        return true;
+    }
+
+    return false;
+
+}
 
 /** select cart product using id */
 function get_cart_product($id)
@@ -27,9 +40,22 @@ function get_cart_product($id)
     $database=new ConnectionDB();
     $columns_name="*";
     $where="id=$id ";
-    $Review = $database->select($table_name, $columns_name,$where);
-    if (!empty($Review)) {
-        return $Review;
+    $data = $database->select($table_name, $columns_name,$where);
+    if (!empty($data)) {
+        return $data[0];
+    }
+
+    return false;
+}
+
+/** select get_cart_books using user id */
+function get_cart_books($user_id)
+{
+    $table_name='books_categories';
+    $database=new ConnectionDB();
+    $data=$database->join_tables("books" ,"id ","cart_products","book_id  and cart_products.user_id =$user_id ");
+    if (!empty($data)) {
+        return $data;
     }
 
     return false;

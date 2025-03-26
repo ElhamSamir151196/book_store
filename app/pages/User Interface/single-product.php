@@ -1,5 +1,32 @@
 
     <main>
+      <?php if(isset($_SESSION['Success'])):?>
+              
+              <div class="alert alert-success text-center">
+                  <?php echo  $_SESSION['Success'] ;?>
+                  <?php unset($_SESSION['Success']);?>
+              </div>
+              
+      <?php endif;?>
+
+      <?php if(isset($_SESSION['error'])):?>
+              
+              <div class="alert alert-danger text-center">
+                  <?php echo  $_SESSION['error'] ;?>
+                  <?php unset($_SESSION['error']);?>
+              </div>
+              
+      <?php endif;?>
+          
+      <?php if(isset($_SESSION['errors'])):
+              foreach($_SESSION['errors'] as $error): ?>
+              <div class="alert alert-danger text-center">
+                  <?php echo   $error;?>
+              </div>
+              <?php endforeach;
+              unset($_SESSION['errors']);    ?>
+      <?php endif;?>
+
       <!-- Product details Start -->
       <section class="section-container my-5 pt-5 d-md-flex gap-5">
         <div class="single-product__img w-100" id="main-img">
@@ -20,13 +47,16 @@
               <?php echo  $_SESSION['book']['price']?> جنيه
               </span>
             </div>
-            <div class="d-flex w-100 gap-2 mb-3">
-              <div class="single-product__quanitity position-relative">
-                <input class="single-product__input text-center px-3" type="number" value="1" placeholder="---">
-                <button class="single-product__increase border-0 bg-transparent position-absolute end-0 h-100 px-3">+</button>
-                <button class="single-product__decrease border-0 bg-transparent position-absolute start-0 h-100 px-3">-</button>
+            <div >
+              <form action="add-to-cart" method="post" class="d-flex w-100 gap-2 mb-3">
+                <input type="hidden" name="id" value="<?=$_SESSION['book']['id']?>">
+              <div class="single-product__quanitity position-relative float-right">
+                <input class="single-product__input text-center px-3" name="qty" type="number" value="1" placeholder="---" id="numberInput">
+                <button class="single-product__increase border-0 bg-transparent position-absolute end-0 h-100 px-3" id="increaseBtn" type="button">+</button>
+                <button class="single-product__decrease border-0 bg-transparent position-absolute start-0 h-100 px-3" id="decreaseBtn" type="button">-</button>
               </div>
-              <button class="single-product__add-to-cart primary-button w-100" onclick="document.location='add-to-cart?id=<?=$_SESSION['book']['id']?>'">اضافه الي السلة</button>
+              <button class="single-product__add-to-cart primary-button w-100" type="submit">اضافه الي السلة</button>
+              </form>
             </div>
             <a href="add-to-favorite?id=<?=$_SESSION['book']['id']?>" style="text-decoration: none;">
               <div class="single-product__favourite d-flex align-items-center gap-2 mb-4">
@@ -375,3 +405,26 @@
       </section>
       <!-- Users comments End -->
     </main>
+
+
+    <script>
+  // Select elements
+  const input = document.getElementById("numberInput");
+  const increaseBtn = document.getElementById("increaseBtn");
+  const decreaseBtn = document.getElementById("decreaseBtn");
+
+  // Increase function
+  increaseBtn.addEventListener("click", () => {
+    input.value = parseInt(input.value) + 1;
+  });
+
+  // Decrease function
+  decreaseBtn.addEventListener("click", () => {
+    if(input.value==1){
+      alert("can't decrease more tnan 1!!");
+    }else{
+      input.value = parseInt(input.value) - 1;
+    }
+   
+  });
+</script>

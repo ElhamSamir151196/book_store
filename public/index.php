@@ -80,6 +80,13 @@
             require_once '../app/controller/book_controller.php';
             add_to_cart();
             break;
+        case 'delete-product-cart':
+            require_once '../app/controller/book_controller.php';
+            delete_product_cart();
+            break;
+        case 'check-out':
+            require '../app/pages/User Interface/checkout.php';
+            break;
         case 'add-to-favorite':
             require_once '../app/controller/favourites_controller.php';
             add_to_favorite();
@@ -106,6 +113,10 @@
         case 'orders':
             require_once '../app/controller/order_controller.php';
             order_index();
+            break;
+        case 'store-order':
+            require_once '../app/controller/order_controller.php';
+            order_store();
             break;
         case 'account_details':
             require '../app/pages/User Interface/account_details.php';

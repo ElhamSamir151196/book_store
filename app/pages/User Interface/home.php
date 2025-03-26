@@ -11,6 +11,24 @@
               </div>
               
       <?php endif;?>
+
+      <?php if(isset($_SESSION['error'])):?>
+              
+              <div class="alert alert-danger text-center">
+                  <?php echo  $_SESSION['error'] ;?>
+                  <?php unset($_SESSION['error']);?>
+              </div>
+              
+      <?php endif;?>
+          
+      <?php if(isset($_SESSION['errors'])):
+              foreach($_SESSION['errors'] as $error): ?>
+              <div class="alert alert-danger text-center">
+                  <?php echo   $error;?>
+              </div>
+              <?php endforeach;
+              unset($_SESSION['errors']);    ?>
+      <?php endif;?>
     <!-- Hero Section Start -->
     <section class="section-container hero">
       <div class="owl-carousel hero__carousel owl-theme">

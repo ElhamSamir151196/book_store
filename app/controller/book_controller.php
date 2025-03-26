@@ -5,6 +5,8 @@ require_once "../app/models/user_model.php";
 require_once "../app/models/category_model.php";
 require_once "../app/models/book_category_model.php";
 require_once '../app/models/favorite_model.php';
+require_once '../app/models/cart_model.php';
+
 
 
 $errors=[];
@@ -86,6 +88,74 @@ function book_show_user(){
 
 }
 
+function add_to_cart(){
+
+    //echo "<br><br><br><br><br><br>";
+    if($_SERVER['REQUEST_METHOD']=="POST"){
+        
+        if(!isset($_POST['id'])){
+            $_SESSION['error'] =  "id required";
+            redirect("home");
+            die;
+        }
+
+        $id=$_POST['id'];
+
+        if(!is_product_in_cart($id,$_SESSION['auth']['id'])){
+            $data=[
+                'user_id'=> $_SESSION['auth']['id'],
+                'book_id'=>$id,
+                'book_qty' => $_POST['qty']??1
+            ];
+
+            if(!add_cart_products($data)){
+                $_SESSION["error"]= "can't add product to cart";
+            }else{
+                $_SESSION["Success"]= "product added to cart";
+            }
+        }else{
+            $_SESSION["error"]= "product already in cart";
+        }
+        
+        $_SESSION['cart']=get_cart_books($_SESSION['auth']['id']);
+        redirect("single-product?id=$id");
+        die;
+        
+    }else{
+        $_SESSION['error'] =  "not supported Method";
+        redirect("home");
+        die;
+    }
+}
+
+function delete_product_cart(){
+    if($_SERVER['REQUEST_METHOD']=="POST"){
+    
+        if(!isset($_POST['id'])){
+            $_SESSION['error'] =  "id required";
+            redirect("home");
+            die;
+        }
+
+        $id=$_POST['id'];
+    
+        $delete_statues=delete_cart_product($id);
+        if($delete_statues){
+            $_SESSION['Success']= "data deleted successfully";
+            $_SESSION['cart']=get_cart_books($_SESSION['auth']['id']);
+        }else{
+            $_SESSION['error'] =  "can't delete data";
+            
+        }
+        redirect("home");
+        die;
+        
+    }else{
+        $_SESSION['error'] =  "not supported Method";
+        redirect("home");
+        die;
+    }
+}
 
 /** dashboard*/
 function book_index()
@@ -118,6 +188,8 @@ function book_index()
         //redirect("index-users");
         //die;
 }
+
+
 /*
 function book_index()
 {
@@ -161,7 +233,7 @@ function book_insert(){
         }elseif(!minVal($Author, 2)){
             $errors[]= "Author must be greater than 2 chars";
         }elseif(!maxVal($Author, 100)){
-            $errors[]=  "Author must be less than 30 chars";
+            $errors[]=  "Author must be less than 100 chars";
         }
 
         // validation description => required, min: 3,max:500 
@@ -258,8 +330,8 @@ function book_insert(){
                 "name" => $name,
                 "Author" => $Author,
                 "qty" => $qty,
-                "price" =>$price?? null,
-                "sale_price" => $sale_price,
+                "price" =>$price?? 0,
+                "sale_price" => $sale_price??0,
                 "user_id" =>$_SESSION['auth']['id'],
                 "description" => $description,
                 "page_number" =>$page_number,

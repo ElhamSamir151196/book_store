@@ -1,4 +1,13 @@
+<?php
+  $sum=0;
+foreach($_SESSION['cart'] as  $book_cart){
+  $sum+=($book_cart['book_qty']*$book_cart['price']);
+}
 
+
+
+
+?>
     <main>
       <section
         class="page-top d-flex justify-content-center align-items-center flex-column text-center"
@@ -18,75 +27,53 @@
       <section class="section-container my-5 py-5 d-lg-flex">
         <div class="checkout__form-cont w-50 px-3 mb-5">
           <h4>الفاتورة </h4>
-          <form class="checkout__form" action="">
+          <form class="checkout__form" action="store-order" method="post">
             <div class="d-flex gap-3 mb-3">
               <div class="w-50">
-                <label for="first-name"
-                  >الاسم الأول <span class="required">*</span></label
-                >
-                <input class="form__input" type="text" id="first-name" />
+                <label for="first-name">الاسم الأول <span class="required">*</span></label>
+                <input class="form__input" type="text" id="first_name" name="first_name"/>
               </div>
               <div class="w-50">
-                <label for="last-name"
-                  >الاسم الأخير <span class="required">*</span></label
-                >
-                <input class="form__input" type="text" id="last-name" />
+                <label for="last-name">الاسم الأخير <span class="required">*</span></label>
+                <input class="form__input" type="text" id="last_name" name="last_name"/>
               </div>
             </div>
             <div class="mb-3">
-              <label for="last-name"
-                >المدينة / المحافظة<span class="required">*</span></label
-              >
-              <select
-                class="form__input bg-transparent"
-                type="text"
-                id="last-name"
-              >
-                <option value="">القاهرة</option>
-                <option value="">اسكندرية</option>
+              <label for="city">المدينة / المحافظة<span class="required">*</span></label>
+              <select class="form__input bg-transparent" type="text" id="city" name="city">
+                <option value="القاهرة">القاهرة</option>
+                <option value="اسكندرية">اسكندرية</option>
               </select>
             </div>
             <div class="mb-3">
-              <label for="last-name"
-                >العنوان بالكامل ( المنطقة -الشارع - رقم المنزل)<span
-                  class="required"
-                  >*</span
-                ></label
-              >
-              <input
-                class="form__input"
-                placeholder="رقم المنزل او الشارع / الحي"
-                type="text"
-                id="last-name"
-              />
+              <label for="address">
+                العنوان بالكامل ( المنطقة -الشارع - رقم المنزل)<span class="required" >*</span>
+                </label>
+              <input class="form__input" placeholder="رقم المنزل او الشارع / الحي" type="text" id="address" name="address"/>
             </div>
             <div class="mb-3">
-              <label for="last-name"
-                >رقم الهاتف<span class="required">*</span></label
-              >
-              <input class="form__input" type="text" id="last-name" />
+              <label for="phone">رقم الهاتف<span class="required">*</span></label>
+              <input class="form__input" type="text" id="phone" name="phone"/>
             </div>
             <div class="mb-3">
-              <label for="last-name"
-                >البريد الإلكتروني (اختياري)<span class="required"
-                  >*</span
-                ></label
-              >
-              <input class="form__input" type="text" id="last-name" />
+              <label for="email">البريد الإلكتروني (اختياري)<span class="required">*</span></label>
+              <input class="form__input" type="email" id="email" name="email"/>
             </div>
             <div class="mb-3">
               <h2>معلومات اضافية</h2>
-              <label for="last-name"
+              <label for="notes"
                 >ملاحظات الطلب (اختياري)<span class="required">*</span></label
               >
               <textarea
                 class="form__input"
                 placeholder="ملاحظات حول الطلب, مثال: ملحوظة خاصة بتسليم الطلب."
                 type="text"
-                id="last-name"
+                id="notes"
+                name="notes"
               ></textarea>
             </div>
-            <button class="primary-button w-100 py-2">تاكيد الطلب</button>
+            <input type="hidden" name="total_price" id="total_price" value="<?= $sum?>">
+            <button class="primary-button w-100 py-2" type="submit">تاكيد الطلب</button>
           </form>
         </div>
         <div class="checkout__order-details-cont w-50 px-3">
@@ -100,43 +87,36 @@
                 </tr>
               </thead>
               <tbody>
+                <?php $sum=0;
+                  $sum_sale=0;?>
+                <?php foreach($_SESSION['cart'] as $key => $book_cart):?>
                 <tr>
-                  <td>كوتش فلات ديزارت -رجالى - الابيض, 42 × 1</td>
+                  <td><?php echo $book_cart['name']?> × <?php echo $book_cart['book_qty']?></td>
                   <td>
-                    <div
-                      class="product__price text-center d-flex gap-2 flex-wrap"
-                    >
+                    <div class="product__price text-center d-flex gap-2 flex-wrap">
+                      <?php if($book_cart['sale_price'] >0):?>
                       <span class="product__price product__price--old">
-                        400.00 جنيه
+                        <?php echo $book_cart['sale_price']?> جنيه 
+                        <?php  $sum_sale+=($book_cart['book_qty']*($book_cart['sale_price']-$book_cart['price']));?>
                       </span>
-                      <span class="product__price"> 180.00 جنيه </span>
+                      <?php endif;?>
+                      <span class="product__price"> <?php echo $book_cart['price']?> جنيه </span>
+                      <?php $sum+=($book_cart['book_qty']*$book_cart['price']);?>
                     </div>
                   </td>
                 </tr>
-                <tr>
-                  <td>كوتش كاجوال -رجالى - بنى, 43 × 1</td>
-                  <td>
-                    <div
-                      class="product__price text-center d-flex gap-2 flex-wrap"
-                    >
-                      <span class="product__price product__price--old">
-                        300.00 جنيه
-                      </span>
-                      <span class="product__price"> 150.00 جنيه </span>
-                    </div>
-                  </td>
-                </tr>
+                <?php endforeach;?>
                 <tr>
                   <th>المجموع</th>
-                  <td class="fw-bolder">330.00 جنيه</td>
+                  <td class="fw-bolder"><?php echo $sum;?> جنيه</td>
                 </tr>
                 <tr class="bg-green">
                   <th>قمت بتوفير</th>
-                  <td class="fw-bolder">370.00 جنيه</td>
+                  <td class="fw-bolder"><?php echo $sum_sale;?> جنيه</td>
                 </tr>
                 <tr>
                   <th>الإجمالي</th>
-                  <td class="fw-bolder">369.00 جنيه</td>
+                  <td class="fw-bolder"><?php echo $sum+39;//added delivery?> جنيه</td><
                 </tr>
               </tbody>
             </table>
