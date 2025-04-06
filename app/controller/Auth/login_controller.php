@@ -1,6 +1,9 @@
 <?php
 require_once "../app/handlers/validations.php";
 require_once "../app/models/user_model.php";
+require_once '../app/models/favorite_model.php';
+require_once '../app/models/cart_model.php';
+
 $errors=[];
 function check_login_user()
 {
@@ -39,6 +42,8 @@ function check_login_user()
                 die;
             }
             $_SESSION['auth'] = $user; //get_User($user);
+            $_SESSION['cart']=get_cart_books_where_not_ordered($_SESSION['auth']['id']);
+            $_SESSION['fav_books']=get_user_favorite_books($_SESSION['auth']['id']);
             $_SESSION['Success']="you login Sucessfully";
             //var_dump($_SESSION['auth']);
             if(isset($remember_me)){

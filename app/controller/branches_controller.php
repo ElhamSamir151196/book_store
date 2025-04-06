@@ -7,6 +7,7 @@ $errors=[];
 
 function branch_index_user(){
     $_SESSION['branches'] =  list_branches();
+    $_SESSION['branches_phones'] =  list_branches_phone();
     require '../app/pages/User Interface/branches.php';
 
 }

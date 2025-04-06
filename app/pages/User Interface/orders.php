@@ -3,66 +3,63 @@
       <?php require("../app/layouts/account_profile_right.php");?>
       <div class="profile__left mt-4 mt-md-0 w-100">
         <div class="profile__tab-content orders active">
-          <div class="orders__none d-flex justify-content-between align-items-center py-3 px-4">
-            <p class="m-0">لم يتم تنفيذ اي طلب بعد.</p>
-            <button class="primary-button">تصفح المنتجات</button>
-          </div>
+          
+          <?php if(!isset( $_SESSION['orders_user_auth'])):?>
+            <div class="orders__none d-flex justify-content-between align-items-center py-3 px-4">
+              <p class="m-0">لم يتم تنفيذ اي طلب بعد.</p>
+              <button class="primary-button">تصفح المنتجات</button>
+            </div>
+          <?php elseif(! $_SESSION['orders_user_auth']):?>
+            <div class="orders__none d-flex justify-content-between align-items-center py-3 px-4">
+              <p class="m-0">لم يتم تنفيذ اي طلب بعد.</p>
+              <button class="primary-button">تصفح المنتجات</button>
+            </div>
+          <?php else:?>
+            <table class="orders__table w-100">
+              <thead>
+                <th class="d-none d-md-table-cell">الطلب</th>
+                <th class="d-none d-md-table-cell">التاريخ</th>
+                <th class="d-none d-md-table-cell">الحالة</th>
+                <th class="d-none d-md-table-cell">الاجمالي</th>
+                <th class="d-none d-md-table-cell">اجراءات</th>
+              </thead>
+              <tbody>
 
-          <table class="orders__table w-100">
-            <thead>
-              <th class="d-none d-md-table-cell">الطلب</th>
-              <th class="d-none d-md-table-cell">التاريخ</th>
-              <th class="d-none d-md-table-cell">الحالة</th>
-              <th class="d-none d-md-table-cell">الاجمالي</th>
-              <th class="d-none d-md-table-cell">اجراءات</th>
-            </thead>
-            <tbody>
-              <tr class="order__item">
-                <td class="d-flex justify-content-between d-md-table-cell">
-                  <div class="fw-bolder d-md-none">الطلب:</div>
-                  <div><a href="">#79574</a></div>
-                </td>
-                <td class="d-flex justify-content-between d-md-table-cell">
-                  <div class="fw-bolder d-md-none">التاريخ:</div>
-                  <div>يوليو 25, 2023</div>
-                </td>
-                <td class="d-flex justify-content-between d-md-table-cell">
-                  <div class="fw-bolder d-md-none">الحالة:</div>
-                  <div>قيد التنفيذ</div>
-                </td>
-                <td class="d-flex justify-content-between d-md-table-cell">
-                  <div class="fw-bolder d-md-none">الاجمالي:</div>
-                  <div>239.0 جنيه لعنصر واحد</div>
-                </td>
-                <td class="d-flex justify-content-between d-md-table-cell">
-                  <div class="fw-bolder d-md-none">اجراءات:</div>
-                  <div><a class="primary-button" href="">عرض</a></div>
-                </td>
-              </tr>
-              <tr class="order__item">
-                <td class="d-flex justify-content-between d-md-table-cell">
-                  <div class="d-md-none">الطلب:</div>
-                  <div><a href="">#79574</a></div>
-                </td>
-                <td class="d-flex justify-content-between d-md-table-cell">
-                  <div class="d-md-none">التاريخ:</div>
-                  <div>يوليو 25, 2023</div>
-                </td>
-                <td class="d-flex justify-content-between d-md-table-cell">
-                  <div class="d-md-none">الحالة:</div>
-                  <div>قيد التنفيذ</div>
-                </td>
-                <td class="d-flex justify-content-between d-md-table-cell">
-                  <div class="d-md-none">الاجمالي:</div>
-                  <div>239.0 جنيه لعنصر واحد</div>
-                </td>
-                <td class="d-flex justify-content-between d-md-table-cell">
-                  <div class="d-md-none">اجراءات:</div>
-                  <div><a class="primary-button" href="">عرض</a></div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                
+                <?php foreach($_SESSION['orders_user_auth'] as $order):?>
+                  
+                <tr class="order__item">
+                  <td class="d-flex justify-content-between d-md-table-cell">
+                    <div class="d-md-none">الطلب:</div>
+                    <div><a href="order_details?id=<?= $order['id']?>">#<?php echo $order['id'] ?></a></div>
+                  </td>
+                  <td class="d-flex justify-content-between d-md-table-cell">
+                    <div class="d-md-none">التاريخ:</div>
+                    <div><?php echo $order['created_at'] ?>  </div>
+                  </td>
+                  <td class="d-flex justify-content-between d-md-table-cell">
+                    <div class="d-md-none">الحالة:</div>
+                    <?php if($order['statues']=="pending"): ?> 
+                    <div>قيد التنفيذ</div>
+                    <?php elseif($order['statues']=="done"): ?> 
+                      <div>تم التنفيذ</div>
+                    <?php elseif($order['statues']=="canceled"): ?> 
+                      <div>تم الالغاء</div>
+                    <?php  endif;?>
+                  </td>
+                  <td class="d-flex justify-content-between d-md-table-cell">
+                    <div class="d-md-none">الاجمالي:</div>
+                    <div><?php echo $order['total_price'] ?> جنيه</div>
+                  </td>
+                  <td class="d-flex justify-content-between d-md-table-cell">
+                    <div class="d-md-none">اجراءات:</div>
+                    <div><a class="primary-button" href="order_details?id=<?= $order['id']?>">عرض</a></div>
+                  </td>
+                </tr>
+                <?php endforeach;?>
+              </tbody>
+            </table>
+          <?php endif;?>
         </div>
         <!-- <section class="section-container">
           <p>تم تقديم الطلب #79917 في يوليو 26, 2023 وهو الآن بحالة قيد التنفيذ.</p>

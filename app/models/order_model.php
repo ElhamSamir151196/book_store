@@ -18,6 +18,20 @@ function list_order()
     return $Users;
 }
 
+/** select books using pagination */
+function get_orders_pagination($columns_name,$where=null,$limit=null)
+{
+    $table_name='orders';
+    $database=new ConnectionDB();
+    //$columns_name="*";
+    //$where="catergory_id=$catergory_id ";
+    $data = $database->select($table_name, $columns_name,$where,$limit);
+    if (!empty($data)) {
+        return $data;
+    }
+
+    return false;
+}
 
 /** select order using id */
 function get_order($id)
@@ -37,7 +51,7 @@ function get_order($id)
 /** select order using user id*/
 function get_order_by_user_id($user_id)
 {
-    $table_name='order_products';
+    $table_name='orders';
     $database=new ConnectionDB();
     $columns_name="*";
     $where="user_id=$user_id ";
@@ -70,5 +84,12 @@ function update_order($id, $data)
     return $update_status;
 }
 
+/*** get last id */
+function get_last_id_order(){
+    $table_name= "orders";
+    $database=new ConnectionDB();
+    $last_id=  $database->get_last_id( $table_name);
+    return $last_id['MAX(id)'];
+}
 
 ?>

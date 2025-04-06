@@ -42,26 +42,10 @@
                 <i class="fa-regular fa-user"></i>
               </a>
             </li>
+            
             <li class="nav__link">
-              <a class="d-flex align-items-center gap-2" href="favourites">
-                المفضلة
-                <div class="position-relative">
-                  <i class="fa-regular fa-heart"></i>
-                  <div class="nav__link-floating-icon">
-                    0
-                  </div>
-                </div>
-              </a>
-            </li>
-            <li class="nav__link">
-              <a class="d-flex align-items-center gap-2" data-bs-toggle="offcanvas" data-bs-target="#nav__cart">
-                عربة التسوق
-                <div class="position-relative">
-                  <i class="fa-solid fa-cart-shopping"></i>
-                  <div class="nav__link-floating-icon">
-                    0
-                  </div>
-                </div>
+              <a class="d-flex align-items-center" href="track-order">
+              تتبع طلبك                
               </a>
             </li>
             <?php endif?>
@@ -132,7 +116,9 @@
         </div>
         <div class="nav__categories-body offcanvas-body pt-4">
           <?php if(!isset($_SESSION['cart'])):?>
-          <p>لا توجد منتجات في سلة المشتريات.</p>
+            <p>لا توجد منتجات في سلة المشتريات.</p>
+          <?php  elseif(!$_SESSION['cart']): ?>
+            <p>لا توجد منتجات في سلة المشتريات.</p>
           <?php  else: ?>
           <div class="cart-products">
             <ul class="nav__list list-unstyled">

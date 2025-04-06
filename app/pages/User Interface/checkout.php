@@ -9,9 +9,7 @@ foreach($_SESSION['cart'] as  $book_cart){
 
 ?>
     <main>
-      <section
-        class="page-top d-flex justify-content-center align-items-center flex-column text-center"
-      >
+      <section class="page-top d-flex justify-content-center align-items-center flex-column text-center">
         <div class="page-top__overlay"></div>
         <div class="position-relative">
           <div class="page-top__title mb-3">

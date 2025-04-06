@@ -23,7 +23,7 @@ function is_product_in_cart($book_id,$user_id){
     $table_name='cart_products';
     $database=new ConnectionDB();
     $columns_name="*";
-    $where="user_id=$user_id and book_id= $book_id ";
+    $where="user_id=$user_id and book_id= $book_id and statues='cart' ";
     $data = $database->select($table_name, $columns_name,$where);
     if (!empty($data)) {
         return true;
@@ -48,6 +48,22 @@ function get_cart_product($id)
     return false;
 }
 
+
+/** select cart product using id */
+function get_cart_product_where($where=null)
+{
+    $table_name='cart_products';
+    $database=new ConnectionDB();
+    $columns_name="*";
+    //$where="id=$id ";
+    $data = $database->select($table_name, $columns_name,$where);
+    if (!empty($data)) {
+        return $data[0];
+    }
+
+    return false;
+}
+
 /** select get_cart_books using user id */
 function get_cart_books($user_id)
 {
@@ -61,6 +77,18 @@ function get_cart_books($user_id)
     return false;
 }
 
+/** select get_cart_books using user id */
+function get_cart_books_where_not_ordered($user_id)
+{
+    $table_name='books_categories';
+    $database=new ConnectionDB();
+    $data=$database->join_tables("books" ,"id ","cart_products","book_id  and cart_products.user_id =$user_id and cart_products.statues= 'cart' ");
+    if (!empty($data)) {
+        return $data;
+    }
+
+    return false;
+}
 
 //delete cart product
 function delete_cart_product($id)

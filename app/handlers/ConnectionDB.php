@@ -45,7 +45,8 @@ class ConnectionDB{
         }
         $data_keys_value=substr($data_keys_value, 0, -1);//remove last or we can use trimr
         
-        $query="UPDATE `$table_name` SET $data_keys_value WHERE $where";        
+        $query="UPDATE `$table_name` SET $data_keys_value WHERE $where";  
+        //echo "<br><br><br><br><br><br>$query";      
         $result=mysqli_query($this->con, $query);
         if(mysqli_affected_rows($this->con)==1){
            // echo "data updated successfully<br>";
@@ -137,6 +138,7 @@ class ConnectionDB{
 
         //echo "<br><br><br><br><br><br><br><br><br>$query";
         $result=mysqli_query($this->con, $query);
+        //echo $query;
         if($result){
             if(mysqli_num_rows($result)>0){// if select many rows
                 $data=mysqli_fetch_all($result,MYSQLI_ASSOC);

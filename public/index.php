@@ -49,8 +49,13 @@
             require '../app/pages/User Interface/track-order.php';
             break;
         case 'order-recieved':
-            require '../app/pages/User Interface/order-recieved.php';
+            //require '../app/pages/User Interface/order-recieved.php';
+            require_once '../app/controller/order_controller.php';
+            order_recieved();
             break;
+        //case 'order-recieved':
+          //  require '../app/pages/User Interface/order-recieved.php';
+          //  break;
         case 'order-details':
             require '../app/pages/User Interface/order-details.php';
             break;
@@ -112,11 +117,15 @@
             break;
         case 'orders':
             require_once '../app/controller/order_controller.php';
-            order_index();
+            order_index_interface();
             break;
         case 'store-order':
             require_once '../app/controller/order_controller.php';
             order_store();
+            break;
+        case 'order_details':
+            require_once '../app/controller/order_controller.php';
+            order_show();
             break;
         case 'account_details':
             require '../app/pages/User Interface/account_details.php';
@@ -319,6 +328,23 @@
         case 'phone_number_delete':
             require_once '../app/controller/branches_controller.php';
             branch_delete_phone();
+            break;
+         /****************** orders */
+        case 'dashboard-order-index':
+            require_once '../app/controller/order_controller.php';
+            orders_index();
+            break;
+        case 'order-show':
+            require_once '../app/controller/order_controller.php';
+            order_show_admin();
+            break;
+        case 'order-edit':
+            require_once '../app/controller/order_controller.php';
+            order_edit();
+            break;
+        case 'order-update':
+            require_once '../app/controller/order_controller.php';
+            order_Update();
             break;
             /** default */
         default:

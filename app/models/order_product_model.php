@@ -42,9 +42,9 @@ function get_order_product_by_order_id($order_id)
     $database=new ConnectionDB();
     $columns_name="*";
     $where="order_id=$order_id ";
-    $Review = $database->select($table_name, $columns_name,$where);
-    if (!empty($Review)) {
-        return $Review;
+    $data = $database->select($table_name, $columns_name,$where);
+    if (!empty($data)) {
+        return $data;
     }
 
     return false;

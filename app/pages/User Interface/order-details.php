@@ -1,4 +1,14 @@
 
+<?php
+
+  if(!isset($_SESSION['order_details']) || !isset($_SESSION['order_products'])){
+    header('location:orders');
+    die;
+  }
+
+    if(!$_SESSION['order_products']){$_SESSION['order_products']=[];}// in case false make it empty array
+
+?>
     <main>
       <div
         class="page-top d-flex justify-content-center align-items-center flex-column text-center"
@@ -17,9 +27,16 @@
 
       <section class="section-container my-5 py-5">
         <p>
-          تم تقديم الطلب #79917 في يوليو 26, 2023 وهو الآن بحالة قيد التنفيذ.
+          تم تقديم الطلب #<?php echo $_SESSION['order_details']['id']?> في <?php echo $_SESSION['order_details']['created_at']?> وهو الآن بحالة 
+        
+          <?php if($_SESSION['order_details']['statues']=="pending"): ?> 
+            قيد التنفيذ
+          <?php elseif($_SESSION['order_details']['statues']=="done"): ?> 
+            تم التنفيذ
+          <?php elseif($_SESSION['order_details']['statues']=="canceled"): ?> 
+            تم الالغاء
+          <?php  endif;?>
         </p>
-
         <section>
           <h2>تفاصيل الطلب</h2>
           <table class="success__table w-100 mb-5">
@@ -30,43 +47,43 @@
               </tr>
             </thead>
             <tbody>
+              
+              <?php foreach($_SESSION['order_products'] as  $product):?>
+                
               <tr>
                 <td>
-                  <div>
-                    <a href="">كوتش فلات ديزارت -رجالى - الابيض, 42</a> x 1
+                  <div> 
+                  <span class="fw-bold">  اسم الكتاب:</span>
+                  <span><?php echo $product['product_name'];?></span>
                   </div>
                   <div>
-                    <span class="fw-bold">اللون:</span>
-                    <span>لابيض</span>
+                    <span class="fw-bold">الكميه  :</span>
+                    <span><?php echo $product['product_qty']?></span>
+                  </div>
+                  <?php if($product['sale_price']!=0):?>
+                  <div>
+                    <span class="fw-bold">السعر قبل التخفيض:</span>
+                    <span><?php echo $product['sale_price'];?> جنيه</span>
+                  </div>
+                  <?php endif?>
+                  <div>
+                    <span class="fw-bold">السعر  :</span>
+                    <span><?php echo $product['price'];?> جنيه</span>
                   </div>
                   <div>
-                    <span class="fw-bold">المقاس:</span>
-                    <span>42</span>
-                  </div>
-                </td>
-                <td>200.00 جنيه</td>
-              </tr>
-              <tr>
-                <td>
-                  <div><a href="">كوتش كاجوال -رجالى - بنى, 43</a> x 1</div>
-                  <div>
-                    <span class="fw-bold">اللون:</span>
-                    <span>بني</span>
-                  </div>
-                  <div>
-                    <span class="fw-bold">المقاس:</span>
-                    <span>43</span>
+                    <img  src='../app/storage/<?= $product['image'] ?>' style="width: 150px; height: 150px;"/>
                   </div>
                 </td>
-                <td>150.00 جنيه</td>
+                <td><?php echo $product['price']*$product['product_qty'];?> جنيه</td>
               </tr>
+              <?php  endforeach;?>
               <tr>
                 <th>المجموع:</th>
-                <td class="fw-bolder">350.00 جنيه</td>
+                <td class="fw-bolder"><?php echo $_SESSION['order_details']['total_price']?> جنيه</td>
               </tr>
               <tr>
                 <th>الإجمالي:</th>
-                <td class="fw-bold">389.00 جنيه</td>
+                <td class="fw-bold"><?php echo $_SESSION['order_details']['total_price']+39?> جنيه</td>
               </tr>
             </tbody>
           </table>
@@ -74,11 +91,12 @@
         <section class="mb-5">
           <h2>عنوان الفاتورة</h2>
           <div class="border p-3 rounded-3">
-            <p class="mb-1">محمد محسن</p>
-            <p class="mb-1">43 الاتحاد</p>
-            <p class="mb-1">القاهرة</p>
-            <p class="mb-1">01020288964</p>
-            <p class="mb-1">moamenyt@gmail.com</p>
+            <p class="mb-1"> <?php echo $_SESSION['order_details']['first_name']?> <?php echo $_SESSION['order_details']['last_name']?>  </p>
+            <p class="mb-1"><?php echo $_SESSION['order_details']['address']?> </p>
+            <p class="mb-1"><?php echo $_SESSION['order_details']['city']?> </p>
+            <p class="mb-1"><?php echo $_SESSION['order_details']['phone']?> </p>
+            <p class="mb-1"><?php echo $_SESSION['order_details']['email']?> </p>
+            <p class="mb-1"><?php echo $_SESSION['order_details']['notes']?> </p>
           </div>
         </section>
       </section>

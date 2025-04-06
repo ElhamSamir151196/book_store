@@ -105,7 +105,8 @@ function add_to_cart(){
             $data=[
                 'user_id'=> $_SESSION['auth']['id'],
                 'book_id'=>$id,
-                'book_qty' => $_POST['qty']??1
+                'book_qty' => $_POST['qty']??1,
+                'statues'=> "cart"
             ];
 
             if(!add_cart_products($data)){
@@ -114,10 +115,23 @@ function add_to_cart(){
                 $_SESSION["Success"]= "product added to cart";
             }
         }else{
-            $_SESSION["error"]= "product already in cart";
+            $where=" book_id=$id and user_id= ". $_SESSION['auth']['id']." and statues='cart'";
+            $book_cart=get_cart_product_where($where);
+            echo "<br><br><br><br><br><br><br><br>";
+            var_dump($book_cart);
+            //$_SESSION["error"]= "product already in cart";
+            $data=[
+                'book_qty' => $_POST['qty']??$book_cart['book_qty']
+            ];
+
+            if(!update_cart_product($book_cart['id'],$data)){
+                $_SESSION["error"]= "can't update product  qty in cart";
+            }else{
+                $_SESSION["Success"]= "product qty updated in cart";
+            }
         }
         
-        $_SESSION['cart']=get_cart_books($_SESSION['auth']['id']);
+        $_SESSION['cart']=get_cart_books_where_not_ordered($_SESSION['auth']['id']);
         redirect("single-product?id=$id");
         die;
         
@@ -142,7 +156,7 @@ function delete_product_cart(){
         $delete_statues=delete_cart_product($id);
         if($delete_statues){
             $_SESSION['Success']= "data deleted successfully";
-            $_SESSION['cart']=get_cart_books($_SESSION['auth']['id']);
+            $_SESSION['cart']=get_cart_books_where_not_ordered($_SESSION['auth']['id']);
         }else{
             $_SESSION['error'] =  "can't delete data";
             

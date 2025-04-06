@@ -10,8 +10,8 @@ function add_branches_phone($new_branches_phone)
     return  $insert_statues; //"Account Created Sucessfully"
 }
 
-// list order products
-function list_order_products()
+// list branches_phone
+function list_branches_phone()
 {
     $table_name='branches_phone';
     $database=new ConnectionDB();

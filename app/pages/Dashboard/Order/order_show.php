@@ -1,7 +1,7 @@
 
 
 <div class="container mt-5 mb-5">
-    <h2 class="border p-2 my-2 text-center">Show Branch</h2>
+    <h2 class="border p-2 my-2 text-center">Show Order</h2>
         
     <!-- Handling Messages Form Session -->
       <?php if(isset($_SESSION['Success'])):?>
@@ -31,43 +31,53 @@
               unset($_SESSION['errors']);    ?>
       <?php endif;?>
     <!--END of Handling Messages Form Session -->
-        <?php if(isset($_SESSION['branch'])):?>
+        <?php if(isset($_SESSION['order'])):?>
             <table class="table table-striped-columns">
                 <thead>
                     <tr>
-                    <th scope="col">Branch ID</th>
-                    <th scope="col">(<?php echo $_SESSION['branch']['id'];  ?>)</th>
+                    <th scope="col">Order ID</th>
+                    <th scope="col">(<?php echo $_SESSION['order']['id'];  ?>)</th>
                    
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                     <th scope="row">City</th>
-                    <td><?php echo $_SESSION['branch']['city'];  ?></td>
+                    <td><?php echo $_SESSION['order']['city'];  ?></td>
                     </tr>
                     <tr>
-                    <th scope="row">Street</th>
-                    <td><?php echo $_SESSION['branch']['street'];  ?></td>
+                    <th scope="row">Address</th>
+                    <td><?php echo $_SESSION['order']['address'];  ?></td>
                     </tr>
                     
                     <tr>
-                    <th scope="row">Address</th>
-                    <td><?php echo $_SESSION['branch']['address'];  ?></td>
+                    <th scope="row">Price</th>
+                    <td><?php echo $_SESSION['order']['total_price'];  ?></td>
+                    </tr>
+
+                    <tr>
+                    <th scope="row">Total Price</th>
+                    <td><?php echo $_SESSION['order']['total_price']+39;  ?></td>
+                    </tr>
+
+                    <tr>
+                    <th scope="row">Statues</th>
+                    <td><?php echo $_SESSION['order']['statues'];  ?></td>
                     </tr>
                     
                     <tr>
                     <th scope="row">Created at</th>
-                    <td><?php echo $_SESSION['branch']['created_at'];  ?></td>
+                    <td><?php echo $_SESSION['order']['created_at'];  ?></td>
                     </tr>
                     
 
                     
-                    <th scope="row">Branch created by</th>
-                    <?php if(isset($_SESSION['branch_user'])):?>
+                    <th scope="row">Order created by</th>
+                    <?php if(isset($_SESSION['order_user'])):?>
                        
-                        <td><?php echo $_SESSION['branch_user']['name'];  ?> (<?php echo $_SESSION['branch_user']['id'];  ?>)</td>
+                        <td><?php echo $_SESSION['order_user']['name'];  ?> (<?php echo $_SESSION['order_user']['id'];  ?>)</td>
                     <?php else: ?> <!-- if user deleted from system -->
-                        <td><?php echo $_SESSION['branch']['user_id'];  ?> (but not exist user now)</td>
+                        <td><?php echo $_SESSION['order']['user_id'];  ?> (but not exist user now)</td>
                     <?php endif;  ?>
                     </tr>
                     
@@ -76,24 +86,30 @@
             </table>
             
         <?php endif;?>
-        <?php if($_SESSION['branch_phones']):?>
+        <?php if($_SESSION['order_products']):?>
             <div class="card-body">
             <table class="table table-striped table-bordered">
             <thead>
                 <tr>
                     <th class="text-center">ID</th>
-                    <th class="text-center">Phone</th>
-                    <th class="text-center">Created At</th>
+                    <th class="text-center">Name</th>
+                    <th class="text-center">Price</th>
+                    <th class="text-center">QTY</th>
+                    <th class="text-center">Image</th>
                 </tr>
             </thead>
             <tbody>
                 
                 
-                    <?php foreach($_SESSION['branch_phones'] as $phone): ?>
+                    <?php foreach($_SESSION['order_products'] as $product): ?>
                         <tr>
-                            <td class="text-center"><?= $phone['id'] ?></td>
-                            <td class="text-center"><?= $phone['phone_number'] ?></td>
-                            <td class="text-center"><?= $phone['created_at'] ?></td>
+                            <td class="text-center"><?= $product['id'] ?></td>
+                            <td class="text-center"><?= $product['product_name'] ?></td>
+                            <td class="text-center"><?= $product['price'] ?></td>
+                            <td class="text-center"><?= $product['product_qty'] ?></td>
+                            <td class="text-center">
+                                <img  src='../app/storage/<?= $product['image'] ?>' style="width: 100px; height: 100px;"/>
+                            </td>
                         </tr>
                     <?php endforeach; ?>
             
