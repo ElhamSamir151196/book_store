@@ -42,9 +42,6 @@ if(!isset($_SESSION['auth'])){
     <a href="dashboard-contact-index" class="text-white"><i class="fas fa-cogs"></i> Contacts</a>
     <a href="dashboard-order-index" class="text-white"><i class="fas fa-cogs"></i> Orders</a>
     <a href="dashboard-branch-index" class="text-white"><i class="fas fa-cogs"></i> Branches</a>
-    <a href="dashboard-cart-index" class="text-white"><i class="fas fa-cogs"></i> Carts</a>
-    <a href="dashboard-favorite-index" class="text-white"><i class="fas fa-cogs"></i> Favorites</a>
-    <a href="dashboard-offer-index" class="text-white"><i class="fas fa-cogs"></i> Offers</a>
   </div>
 
   <!-- Main Content -->

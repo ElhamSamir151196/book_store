@@ -244,7 +244,8 @@ function order_store(){
                         "product_qty" =>$cart_product['book_qty'],
                         "image" => $cart_product['image'],
                         "price" => $cart_product["price"],
-                        "sale_price" => $cart_product["sale_price"]
+                        "sale_price" => $cart_product["sale_price"],
+                        "product_id"=> $cart_product["book_id"]
                     ];
                     update_cart_product($cart_product['id'],["statues"=>"ordered"]);
                     add_order_product($cart_product_data);

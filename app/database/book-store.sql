@@ -177,6 +177,7 @@ CREATE TABLE `orders` (
 CREATE TABLE `order_products` (
     `id` INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
     `order_id` INT UNSIGNED NOT NULL,
+    `product_id` INT UNSIGNED NOT NULL,
     `product_name` varchar(100) NOT NULL,
     `product_qty` INT UNSIGNED NOT NULL,
     `image` text,

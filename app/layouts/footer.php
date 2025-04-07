@@ -68,7 +68,7 @@
       </div>
     </div>
     <div class="footer__bottom text-center p-3 section-container">
-      جميع الحقوق محفوظة Eraasoft 2023
+      جميع الحقوق محفوظة Elham Samir 2025
     </div>
   </footer>
   <!-- Footer Section End -->

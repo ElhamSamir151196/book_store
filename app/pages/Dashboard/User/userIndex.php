@@ -69,6 +69,12 @@
                             <a href="user_delete?id=<?= $user['id'] ?>" class="btn btn-sm btn-outline-danger rounded-0" onclick="if(confirm(`Are you sure to delete <?= $user['name'] ?> details?`) === false) event.preventDefault();">
                                 <i class="fa-solid fa-trash"></i>
                             </a>
+                            <a href="user_favorite?id=<?= $user['id'] ?>" class="btn btn-sm btn-outline-info rounded-0" >
+                                <i class="fa-solid fa-heart"></i>
+                            </a>
+                            <a href="user_cart?id=<?= $user['id'] ?>" class="btn btn-sm btn-outline-info rounded-0">
+                                <i class="fa-solid fa-cart-shopping"></i>
+                            </a>
                         </td>
                     </tr>
                 <?php endforeach; ?>

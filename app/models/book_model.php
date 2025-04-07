@@ -80,6 +80,31 @@ function get_books_by_user_id($user_id)
     return false;
 }
 
+function get_most_buy_books(){
+
+    $query= 'select * FROM books ,
+    (SELECT `product_id` FROM order_products GROUP BY `product_id` ORDER BY COUNT(*) desc limit 10) as  sub
+    WHERE sub.product_id = books.id ';
+    $database=new ConnectionDB();
+    $data = $database->select_query($query);
+    if (!empty($data)) {
+        return $data;
+    }
+
+    return false;
+}
+
+function get_last_list_books(){
+
+    $query= 'SELECT * FROM `books` ORDER by id DESC limit 10 ';
+    $database=new ConnectionDB();
+    $data = $database->select_query($query);
+    if (!empty($data)) {
+        return $data;
+    }
+
+    return false;
+}
 
 //delete book 
 function delete_book($id)

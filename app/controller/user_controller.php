@@ -1,6 +1,10 @@
 <?php
 require_once "../app/handlers/validations.php";
 require_once "../app/models/user_model.php";
+require_once '../app/models/favorite_model.php';
+require_once "../app/models/book_model.php";
+require_once '../app/models/cart_model.php';
+
 
 $errors=[];
 
@@ -111,6 +115,7 @@ function user_index()
         //redirect("index-users");
         //die;
 }
+
 /*
 function user_index(){
     
@@ -237,5 +242,43 @@ function delete(){
     }
 }
 
+function user_favorite(){
+    if($_SERVER['REQUEST_METHOD']=="GET"){
+    
+        if(!isset($_GET['id'])){
+            $_SESSION['error'] =  "id required";
+            user_index();
+        }
+
+        $id=$_GET['id'];
+
+        $_SESSION['fav_books']=get_user_favorite_books($id)??[];
+        require("../app/pages/Dashboard/User/userFavorite.php");//redirect user
+        
+    }else{
+        $_SESSION['error'] =  "not supported Method";
+        user_index();
+    }
+}
+
+function user_cart(){
+    if($_SERVER['REQUEST_METHOD']=="GET"){
+    
+        if(!isset($_GET['id'])){
+            $_SESSION['error'] =  "id required";
+            user_index();
+        }
+
+        $id=$_GET['id'];
+
+        $_SESSION['user_cart_products']=get_cart_books_where_not_ordered($id)??[];
+        
+        require("../app/pages/Dashboard/User/userCart.php");//redirect user
+        
+    }else{
+        $_SESSION['error'] =  "not supported Method";
+        user_index();
+    }
+}
 
 ?>

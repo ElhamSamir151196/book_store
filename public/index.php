@@ -195,6 +195,14 @@
             require_once '../app/controller/user_controller.php';
             delete();
             break;
+        case 'user_favorite':
+            require_once '../app/controller/user_controller.php';
+            user_favorite();
+            break;
+        case 'user_cart':
+            require_once '../app/controller/user_controller.php';
+            user_cart();
+            break;
             /**** bashboard Category */
         case 'dashboard-catergory-index':
             require_once '../app/controller/category_controller.php';

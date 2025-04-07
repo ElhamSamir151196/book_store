@@ -159,6 +159,29 @@ class ConnectionDB{
         mysqli_close($this->con);
     }
 
+    
+    function select_query($query){
+        //$query="SELECT $columns_name FROM `$table_name`";
+        
+
+        //echo "<br><br><br><br><br><br>".$query;
+        $result=mysqli_query($this->con, $query);
+        
+        if($result){
+            if(mysqli_num_rows($result)>0){
+                $data=mysqli_fetch_all($result,MYSQLI_ASSOC);
+                return $data;
+
+            }else{
+              //  echo  "No Data Exist in $table_name"."<br>";
+                return [];
+            }
+        }else{
+           // echo  "select data error".mysqli_connect_error()."<br>";
+            return [];
+        }
+    }
+
 }
 
 
